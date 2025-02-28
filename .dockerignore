@@ -1,0 +1,48 @@
+# Исключаем файлы и директории, не нужные в Docker-образе
+
+# Игнорируем IDE-файлы
+.idea
+*.iml
+*.ipr
+*.iws
+*.vscode
+
+# Игнорируем файлы системы сборки
+target/
+build/
+out/
+*.class
+
+# Исключаем файлы и каталоги системы контроля версий
+.git/
+.gitignore
+.gitattributes
+
+# Исключаем артефакты Maven и Gradle
+.gradle/
+!**/src/main/resources/
+!**/src/main/resources/**
+
+# Исключаем зависимости, так как они подтягиваются при сборке
+**/node_modules/
+**/vendor/
+
+# Исключаем файлы логов и кеши
+logs/
+*.log
+**/*.swp
+**/*.swo
+*.tmp
+
+# Исключаем файлы конфигурации ОС
+.DS_Store
+Thumbs.db
+
+# Исключаем переменные окружения и конфиги
+.env
+*.env
+application*.yml
+application*.properties
+
+# Исключаем временные файлы и сборочные артефакты
+hs_err_pid*

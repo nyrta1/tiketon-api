@@ -1,0 +1,22 @@
+services:
+  tiketon:
+    container_name: tiketon
+    image: tiketon:1.0.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - app_network
+    ports:
+      - "8080:8080"
+    restart: always
+    env_file:
+      - .env
+
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local

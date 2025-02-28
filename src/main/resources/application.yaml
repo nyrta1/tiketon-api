@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: tiketondemo
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: ${SPRING_DATASOURCE_URL}
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 50
+          batch_versioned_data: true
+#  cache:
+#    type: redis
+#    redis:
+#      time-to-live: 3600000  # 1 hour in milliseconds
+#  data:
+#    redis:
+#      host: localhost
+#      port: 6379
+
+server:
+  port: 8080
+
+jwt:
+  secret: ${JWT_SECRET}
+  expire-time: 604800000  # 7 days in milliseconds
+
+# Jasypt Configuration
+jasypt:
+  encryptor:
+    password: ${JASYPT_ENCRYPTOR_PASSWORD}
+    algorithm: PBEWithMD5AndDES
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  info:
+    env:
+      enabled: true
