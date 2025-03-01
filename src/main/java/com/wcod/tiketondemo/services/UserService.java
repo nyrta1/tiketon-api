@@ -45,7 +45,11 @@ public class UserService {
         String jwtToken = jwtService.generateToken(user);
         String expireTime = JwtService.getExpireTime();
 
-        return new AuthResponse(jwtToken, expireTime);
+        return AuthResponse.builder()
+                .accessToken(jwtToken)
+                .expiresIn(expireTime)
+                .user(user)
+                .build();
     }
 
 
@@ -66,8 +70,13 @@ public class UserService {
         System.out.println();
 
         String jwtToken = jwtService.generateToken(user);
+        String expireTime = JwtService.getExpireTime();
 
-        return new AuthResponse(jwtToken, JwtService.getExpireTime());
+        return AuthResponse.builder()
+                .accessToken(jwtToken)
+                .expiresIn(expireTime)
+                .user(user)
+                .build();
     }
 }
 

@@ -1,13 +1,13 @@
 package com.wcod.tiketondemo.data.dto.auth;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.wcod.tiketondemo.data.models.UserEntity;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class AuthResponse {
 
     @JsonProperty("access_token")
@@ -28,15 +28,6 @@ public class AuthResponse {
     @JsonProperty("token_type")
     private String tokenType = TOKEN_TYPE;
 
-    public AuthResponse(String accessToken, String refreshToken, String expiresIn, String refreshExpiresIn) {
-        this.accessToken = accessToken;
-        this.refreshToken = refreshToken;
-        this.expiresIn = expiresIn;
-        this.refreshExpiresIn = refreshExpiresIn;
-    }
-
-    public AuthResponse(String accessToken, String expiresIn) {
-        this.accessToken = accessToken;
-        this.expiresIn = expiresIn;
-    }
+    @JsonProperty("user")
+    private UserEntity user;
 }
