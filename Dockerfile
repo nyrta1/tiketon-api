@@ -9,5 +9,5 @@ FROM eclipse-temurin:21-jre
 COPY --from=build /app/app.jar .
 RUN useradd runtime
 USER runtime
-EXPOSE 8080
-ENTRYPOINT [ "java", "-Dserver.port=8080", "-jar", "app.jar" ]
+EXPOSE 8443
+ENTRYPOINT [ "java", "-Dserver.port=8443", "-jar", "app.jar" ]

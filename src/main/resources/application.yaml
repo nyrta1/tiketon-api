@@ -1,3 +1,11 @@
+server:
+  port: 8443
+  ssl:
+    key-store: classpath:ssl/keystore.p12
+    key-store-password: tiketondemo
+    key-store-type: PKCS12
+    key-alias: tomcat
+
 spring:
   application:
     name: tiketondemo
@@ -15,23 +23,11 @@ spring:
         jdbc:
           batch_size: 50
           batch_versioned_data: true
-#  cache:
-#    type: redis
-#    redis:
-#      time-to-live: 3600000  # 1 hour in milliseconds
-#  data:
-#    redis:
-#      host: localhost
-#      port: 6379
-
-server:
-  port: 8080
 
 jwt:
   secret: ${JWT_SECRET}
-  expire-time: 604800000  # 7 days in milliseconds
+  expire-time: 604800000
 
-# Jasypt Configuration
 jasypt:
   encryptor:
     password: ${JASYPT_ENCRYPTOR_PASSWORD}
