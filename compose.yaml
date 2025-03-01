@@ -1,7 +1,7 @@
 services:
   tiketon:
-    container_name: tiketon
-    image: tiketon:1.0.0
+    container_name: tiketon-https
+    image: tiketon-https:1.0.0
     build:
       context: .
       dockerfile: Dockerfile
