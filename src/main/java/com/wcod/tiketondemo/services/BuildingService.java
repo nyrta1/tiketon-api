@@ -26,6 +26,10 @@ public class BuildingService {
     private final CityRepository cityRepository;
     private final BuildingRepository buildingRepository;
 
+    public Page<Building> getAllBuildings(Pageable pageable) {
+        return buildingRepository.findAll(pageable);
+    }
+
     public Page<Building> getBuildingsByCity(UUID cityId, Pageable pageable) {
         return buildingRepository.findByCityId(cityId, pageable);
     }

@@ -22,6 +22,7 @@ public interface BuildingRepository extends JpaRepository<Building, UUID> {
     @Query("SELECT b FROM Building b WHERE SQRT(POWER(b.latitudeX - :latitude, 2) + POWER(b.longitudeY - :longitude, 2)) <= 2.0")
     List<Building> findByCoordinatesWithinDiagonal(Double latitude, Double longitude);
 
+    Page<Building> findAll(Pageable pageable);
     Page<Building> findByCityId(UUID cityId, Pageable pageable);
 
     Page<Building> findByAddressIgnoreCaseContaining(String address, Pageable pageable);

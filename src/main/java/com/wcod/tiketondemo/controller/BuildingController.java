@@ -30,6 +30,13 @@ public class BuildingController {
 
     private final BuildingService buildingService;
 
+    @GetMapping
+    @Operation(summary = "Get all buildings", description = "Retrieve all buildings with pagination")
+    public ResponseEntity<Page<Building>> getAllBuildings(@PageableDefault(size = 10, sort = "name") Pageable pageable) {
+        return ResponseEntity.ok(buildingService.getAllBuildings(pageable));
+    }
+
+
     @GetMapping("/search/by-city/{cityId}")
     @Operation(summary = "Get buildings by city", description = "Retrieve a list of buildings by city ID")
     public ResponseEntity<Page<Building>> getBuildingsByCity(@PathVariable UUID cityId,
