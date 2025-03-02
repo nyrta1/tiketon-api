@@ -52,6 +52,7 @@ public class SecurityConfig {
             "/api/auth/register",
 
             // Buildings
+            "/api/buildings",
             "/api/buildings/search/by-city/**",
             "/api/buildings/search/by-address",
             "/api/buildings/search/by-name",
