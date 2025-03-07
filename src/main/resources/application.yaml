@@ -20,6 +20,9 @@ jwt:
   secret: ${JWT_SECRET}
   expire-time: 604800000
 
+minio:
+  url: http://94.232.246.12:9000
+
 jasypt:
   encryptor:
     password: ${JASYPT_ENCRYPTOR_PASSWORD}
