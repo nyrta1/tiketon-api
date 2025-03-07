@@ -22,7 +22,6 @@ import java.util.UUID;
         name = "event_session",
         indexes = {
                 @Index(name = "idx_session_start_time", columnList = "startTime"),
-                @Index(name = "idx_session_event_building", columnList = "event_id, building_id")
         }
 )
 public class EventSession {
@@ -35,10 +34,10 @@ public class EventSession {
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
-    @ManyToOne
-    @JsonBackReference
-    @JoinColumn(name = "building_id", nullable = false)
-    private Building building;
+//    @ManyToOne
+//    @JsonBackReference
+//    @JoinColumn(name = "building_id", nullable = false)
+//    private Building building;
 
     @Column(nullable = false)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -49,4 +48,9 @@ public class EventSession {
     @JsonManagedReference
     @OneToMany(mappedBy = "session", cascade = CascadeType.ALL)
     private List<Ticket> tickets;
+
+//    @JsonIgnore
+//    @JsonManagedReference
+//    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Seat> seats;
 }

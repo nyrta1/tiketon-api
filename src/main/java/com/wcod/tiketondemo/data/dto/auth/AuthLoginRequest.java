@@ -13,9 +13,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AuthLoginRequest {
 
-        @NotBlank(message = "Email is mandatory")
-        @Email(message = "Invalid email format")
-        private String email;
+        @NotBlank(message = "Phone number is mandatory")
+        @Pattern(
+                regexp = "^\\+7[0-9]{10}$",
+                message = "Phone number must be in the format +7XXXXXXXXXX"
+        )
+        private String phoneNumber;
+
+//        @NotBlank(message = "Email is mandatory")
+//        @Email(message = "Invalid email format")
+//        private String email;
 
         @NotBlank(message = "Password is mandatory")
         @Size(min = 8, max = 64, message = "Password should be between 8 and 64 characters")

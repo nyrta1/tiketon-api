@@ -79,6 +79,13 @@
 			<version>1.9.3</version>
 		</dependency>
 
+		<!-- S3 -->
+		<dependency>
+			<groupId>io.minio</groupId>
+			<artifactId>minio</artifactId>
+			<version>8.5.11</version>
+		</dependency>
+
 		<!-- Redis Connection Library -->
 <!--		<dependency>-->
 <!--			<groupId>org.springframework.boot</groupId>-->

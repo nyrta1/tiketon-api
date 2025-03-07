@@ -1,13 +1,12 @@
 package com.wcod.tiketondemo.data.dto.props;
 
 import com.wcod.tiketondemo.data.models.AgeRestriction;
-import com.wcod.tiketondemo.data.models.EventCategory;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -28,9 +27,8 @@ public class EventRequestDTO {
     @NotNull(message = "categoryID is required")
     private UUID categoryID;
 
-    @NotNull(message = "startTime is required")
-    private LocalDateTime startTime;
-
     @NotNull(message = "ageRestriction is required")
     private AgeRestriction ageRestriction;
+
+    private MultipartFile backgroundImage;
 }

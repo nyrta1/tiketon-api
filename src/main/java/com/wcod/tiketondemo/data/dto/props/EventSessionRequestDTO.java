@@ -12,8 +12,8 @@ public class EventSessionRequestDTO {
     @NotNull(message = "Event ID is required")
     private UUID eventId;
 
-    @NotNull(message = "Building ID is required")
-    private UUID buildingId;
+    @NotNull(message = "Ticket price is required")
+    private Double price;
 
     @NotNull(message = "Start time is required")
     @Future(message = "Start time must be in the future")

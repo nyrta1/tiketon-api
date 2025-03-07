@@ -13,11 +13,9 @@ import java.util.UUID;
 @Repository
 public interface EventSessionRepository extends JpaRepository<EventSession, UUID> {
     List<EventSession> findByEventId(UUID eventId);
-    List<EventSession> findByBuildingId(UUID buildingId);
     List<EventSession> findByStartTimeBetween(LocalDateTime start, LocalDateTime end);
 
     Page<EventSession> findByEventId(UUID eventId, Pageable pageable);
-    Page<EventSession> findByBuildingId(UUID buildingId, Pageable pageable);
     Page<EventSession> findByStartTimeBetween(LocalDateTime start, LocalDateTime end, Pageable pageable);
     Page<EventSession> findAll(Pageable pageable);
 }

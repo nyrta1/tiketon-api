@@ -1,6 +1,7 @@
 package com.wcod.tiketondemo.controller;
 
 import com.wcod.tiketondemo.data.dto.props.EventSessionRequestDTO;
+import com.wcod.tiketondemo.data.dto.props.TicketResponseDTO;
 import com.wcod.tiketondemo.data.models.EventSession;
 import com.wcod.tiketondemo.services.EventSessionService;
 import io.swagger.v3.oas.annotations.Operation;

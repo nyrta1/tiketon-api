@@ -27,7 +27,8 @@ import java.util.UUID;
 @Table(
         name = "users",
         indexes = {
-                @Index(name = "idx_user_email", columnList = "email")
+//                @Index(name = "idx_user_email", columnList = "email"),
+                @Index(name = "idx_user_phone_number", columnList = "phone_number")
         }
 )
 public class UserEntity implements UserDetails {
@@ -46,10 +47,14 @@ public class UserEntity implements UserDetails {
     @Size(min = 2, max = 50, message = "Last name must be between 2 and 50 characters")
     private String surname;
 
-    @Column(unique = true)
-    @Email(message = "Invalid email format")
-    @NotBlank(message = "Email is required")
-    private String email;
+    @Column(unique = true, nullable = false)
+    @NotBlank(message = "Phone number is required")
+    private String phoneNumber;
+
+    // @Column(unique = true)
+    // @Email(message = "Invalid email format")
+    // @NotBlank(message = "Email is required")
+    // private String email;
 
     @JsonIgnore
     @NotBlank(message = "Password is required")
@@ -95,7 +100,7 @@ public class UserEntity implements UserDetails {
     @Override
     @JsonIgnore
     public String getUsername() {
-        return this.email;
+        return this.phoneNumber;
     }
 
     @Override
@@ -128,7 +133,8 @@ public class UserEntity implements UserDetails {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", email='" + email + '\'' +
+//                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
                 ", password='[PROTECTED]" + '\'' +
                 ", role=" + role +
                 ", isAccountNonExpired=" + isAccountNonExpired +
