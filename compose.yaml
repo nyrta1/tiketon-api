@@ -1,7 +1,7 @@
 services:
-  tiketon:
+  tiketon-https:
     container_name: tiketon-https
-    image: tiketon-https:1.0.0
+    image: tiketon-https:latest
     build:
       context: .
       dockerfile: Dockerfile
@@ -12,10 +12,28 @@ services:
     restart: always
     env_file:
       - .env
+    environment:
+      SERVER_PORT: 8443
+
+  tiketon-http:
+    container_name: tiketon-http
+    image: tiketon-http:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - app_network
+    ports:
+      - "8080:8080"
+    restart: always
+    env_file:
+      - .env
+    environment:
+      SERVER_PORT: 8080
 
   postgres:
     container_name: postgres
-    image: postgres:latest
+    image: postgres:17
     restart: always
     networks:
       - app_network
