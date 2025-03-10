@@ -26,11 +26,11 @@ import java.util.UUID;
 public class EventController {
     private final EventService eventService;
 
-//    @GetMapping
-//    @Operation(summary = "Get all events", description = "Retrieve a list of all available events")
-//    public ResponseEntity<Page<Event>> getAllEvents(@PageableDefault(size = 10, sort = "title") Pageable pageable) {
-//        return ResponseEntity.ok(eventService.getAllEvents(pageable));
-//    }
+    @GetMapping
+    @Operation(summary = "Get all events", description = "Retrieve a list of all available events")
+    public ResponseEntity<Page<Event>> getAllEvents(@PageableDefault(size = 10, sort = "title") Pageable pageable) {
+        return ResponseEntity.ok(eventService.getAllEvents(pageable));
+    }
 
     @GetMapping("/search/by-id/{eventId}")
     @Operation(summary = "Get event by ID", description = "Retrieve a single event by its unique ID")
