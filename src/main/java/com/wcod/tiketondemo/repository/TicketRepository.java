@@ -25,13 +25,8 @@ public interface TicketRepository extends JpaRepository<Ticket, UUID> {
         ORDER BY t.row ASC, t.number ASC
     """)
     List<TicketResponseDTO> findTicketsBySessionId(UUID sessionId);
-    List<Ticket> findByTicketType(TicketType ticketType);
-    List<Ticket> findByStatus(TicketStatus status);
 
-    Page<Ticket> findBySessionId(UUID sessionId, Pageable pageable);
-    Page<Ticket> findByTicketType(TicketType ticketType, Pageable pageable);
-    Page<Ticket> findByStatus(TicketStatus status, Pageable pageable);
     Page<Ticket> findAll(Pageable pageable);
 
-    Optional<Ticket> findBySessionIdAndRowAndNumber(UUID sessionId, Integer row, Integer seatNumber);
+    Page<Ticket> findAllByBoughtUserId(UUID userId, Pageable pageable);
 }

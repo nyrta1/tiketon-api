@@ -24,11 +24,12 @@ public class EventRequestDTO {
     @NotBlank(message = "additionalInformation is mandatory")
     private String additionalInformation;
 
-    @NotNull(message = "categoryID is required")
-    private UUID categoryID;
+    @NotNull(message = "categoryId is required")
+    private UUID categoryId;
 
     @NotNull(message = "ageRestriction is required")
     private AgeRestriction ageRestriction;
 
+    @NotNull(message = "backgroundImage is required")
     private MultipartFile backgroundImage;
 }

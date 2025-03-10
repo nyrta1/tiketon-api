@@ -1,5 +1,6 @@
 package com.wcod.tiketondemo.controller;
 
+import com.wcod.tiketondemo.data.dto.props.EventSessionPutRequestDTO;
 import com.wcod.tiketondemo.data.dto.props.EventSessionRequestDTO;
 import com.wcod.tiketondemo.data.dto.props.TicketResponseDTO;
 import com.wcod.tiketondemo.data.models.EventSession;
@@ -32,14 +33,14 @@ public class EventSessionController {
 
     private final EventSessionService eventSessionService;
 
-    @GetMapping
-    @Operation(
-            summary = "Get all event sessions",
-            description = "Retrieve all event sessions"
-    )
-    public ResponseEntity<Page<EventSession>> getAllSessions(@PageableDefault(size = 10, sort = "startTime") Pageable pageable) {
-        return ResponseEntity.ok(eventSessionService.getAllSessions(pageable));
-    }
+//    @GetMapping
+//    @Operation(
+//            summary = "Get all event sessions",
+//            description = "Retrieve all event sessions"
+//    )
+//    public ResponseEntity<Page<EventSession>> getAllSessions(@PageableDefault(size = 10, sort = "startTime") Pageable pageable) {
+//        return ResponseEntity.ok(eventSessionService.getAllSessions(pageable));
+//    }
 
     @GetMapping("/search/by-event/{eventId}")
     @Operation(
@@ -51,8 +52,8 @@ public class EventSessionController {
         return ResponseEntity.ok(eventSessionService.getSessionsByEvent(eventId, pageable));
     }
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
             summary = "Create a new event session",
             description = "Add a new event session (Admin only)",
@@ -62,19 +63,19 @@ public class EventSessionController {
         return ResponseEntity.ok(eventSessionService.createSession(requestDTO));
     }
 
-    @PutMapping(path = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping(path = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
             summary = "Update an event session",
             description = "Update an existing event session (Admin only)",
             security = @SecurityRequirement(name = "Bearer Authentication")
     )
-    public ResponseEntity<EventSession> updateSession(@PathVariable UUID id, @Valid @ModelAttribute EventSessionRequestDTO requestDTO) {
+    public ResponseEntity<EventSession> updateSession(@PathVariable UUID id, @Valid @ModelAttribute EventSessionPutRequestDTO requestDTO) {
         return ResponseEntity.ok(eventSessionService.updateSession(id, requestDTO));
     }
 
-    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id}")
     @Operation(
             summary = "Delete an event session",
             description = "Delete an event session by ID (Admin only)",

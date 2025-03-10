@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -30,7 +31,9 @@ public class TicketService {
 
     @Transactional(readOnly = true)
     public List<TicketResponseDTO> getTicketsBySession(UUID sessionId) {
-        return ticketRepository.findTicketsBySessionId(sessionId);
+        return Optional.of(ticketRepository.findTicketsBySessionId(sessionId))
+                .filter(list -> !list.isEmpty())
+                .orElseThrow(() -> new CustomException("Tickets by the session id not found!", HttpStatus.NOT_FOUND));
     }
 
     @Transactional
@@ -63,5 +66,9 @@ public class TicketService {
         ticket.setStatus(TicketStatus.SOLD);
 
         return ticketRepository.save(ticket);
+    }
+
+    public Page<Ticket> getUserTickets(UUID userId, Pageable pageable) {
+        return ticketRepository.findAllByBoughtUserId(userId, pageable);
     }
 }

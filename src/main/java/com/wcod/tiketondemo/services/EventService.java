@@ -60,9 +60,9 @@ public class EventService {
     @Transactional
     public Event createEvent(EventRequestDTO requestDTO) {
         Event event = modelMapper.map(requestDTO, Event.class);
-        EventCategory category = categoryRepository.findById(requestDTO.getCategoryID())
+        EventCategory category = categoryRepository.findById(requestDTO.getCategoryId())
                 .orElseThrow(() -> new CustomException(
-                        String.format("Category not found by ID: %s", requestDTO.getCategoryID()), HttpStatus.NOT_FOUND));
+                        String.format("Category not found by ID: %s", requestDTO.getCategoryId()), HttpStatus.NOT_FOUND));
         event.setCategory(category);
 
         Event savedEvent = eventRepository.save(event);

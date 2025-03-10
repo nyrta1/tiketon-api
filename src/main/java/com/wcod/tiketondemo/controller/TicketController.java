@@ -32,11 +32,11 @@ public class TicketController {
 
     private final TicketService ticketService;
 
-    @GetMapping
-    @Operation(summary = "Get all tickets", description = "Retrieve all tickets")
-    public ResponseEntity<Page<Ticket>> getAllTickets(@PageableDefault(size = 10, sort = "price") Pageable pageable) {
-        return ResponseEntity.ok(ticketService.getAllTickets(pageable));
-    }
+//    @GetMapping
+//    @Operation(summary = "Get all tickets", description = "Retrieve all tickets")
+//    public ResponseEntity<Page<Ticket>> getAllTickets(@PageableDefault(size = 10, sort = "price") Pageable pageable) {
+//        return ResponseEntity.ok(ticketService.getAllTickets(pageable));
+//    }
 
     @GetMapping("/search/by-session/{sessionId}")
     @Operation(summary = "Get tickets by session", description = "Retrieve tickets for a specific event session")

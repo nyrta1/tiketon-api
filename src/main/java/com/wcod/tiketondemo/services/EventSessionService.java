@@ -1,7 +1,7 @@
 package com.wcod.tiketondemo.services;
 
+import com.wcod.tiketondemo.data.dto.props.EventSessionPutRequestDTO;
 import com.wcod.tiketondemo.data.dto.props.EventSessionRequestDTO;
-import com.wcod.tiketondemo.data.dto.props.TicketResponseDTO;
 import com.wcod.tiketondemo.data.models.*;
 import com.wcod.tiketondemo.repository.EventRepository;
 import com.wcod.tiketondemo.repository.EventSessionRepository;
@@ -41,7 +41,7 @@ public class EventSessionService {
 
         EventSession session = new EventSession();
         session.setEvent(event);
-        session.setStartTime(requestDTO.getStartTime());
+        session.setStartTime(requestDTO.getStartTime().toLocalDateTime());
 
         EventSession savedSession = eventSessionRepository.save(session);
 
@@ -63,15 +63,11 @@ public class EventSessionService {
     }
 
     @Transactional
-    public EventSession updateSession(UUID id, EventSessionRequestDTO requestDTO) {
+    public EventSession updateSession(UUID id, EventSessionPutRequestDTO requestDTO) {
         EventSession session = eventSessionRepository.findById(id)
                 .orElseThrow(() -> new CustomException(String.format("Event Session not found by ID: %s", id), HttpStatus.NOT_FOUND));
 
-        Event event = eventRepository.findById(requestDTO.getEventId())
-                .orElseThrow(() -> new CustomException(String.format("Event not found by ID: %s", requestDTO.getEventId()), HttpStatus.NOT_FOUND));
-
-        session.setEvent(event);
-        session.setStartTime(requestDTO.getStartTime());
+        session.setStartTime(requestDTO.getStartTime().toLocalDateTime());
 
         return eventSessionRepository.saveAndFlush(session);
     }
