@@ -40,7 +40,7 @@ public class AdminController {
     }
 
 
-    @PutMapping(path = "/users/password-reset/{userID}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping("/users/password-reset/{userID}")
     @Operation(
             summary = "Reset user password [REQUIRES ADMIN PRIVILEGE]",
             description = "Reset user password",
