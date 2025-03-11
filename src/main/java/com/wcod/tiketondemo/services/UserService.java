@@ -3,6 +3,7 @@ package com.wcod.tiketondemo.services;
 import com.wcod.tiketondemo.data.dto.auth.AuthLoginRequest;
 import com.wcod.tiketondemo.data.dto.auth.AuthRegisterRequest;
 import com.wcod.tiketondemo.data.dto.auth.AuthResponse;
+import com.wcod.tiketondemo.data.dto.props.UserUpdateRequestDTO;
 import com.wcod.tiketondemo.data.models.Role;
 import com.wcod.tiketondemo.data.models.UserEntity;
 import com.wcod.tiketondemo.repository.UserRepository;
@@ -10,12 +11,17 @@ import com.wcod.tiketondemo.shared.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -74,6 +80,34 @@ public class UserService {
                 .expiresIn(expireTime)
                 .user(user)
                 .build();
+    }
+
+    public UserEntity resetPasswordByUserID(UUID userID, String password) {
+        UserEntity user = userRepository.findById(userID)
+                .orElseThrow(() -> new CustomException(
+                        String.format("User not found by ID: %s", userID),
+                        HttpStatus.NOT_FOUND
+                ));
+
+        String newHashedPassword = passwordEncoder.encode(password);
+        user.setPassword(newHashedPassword);
+        return userRepository.save(user);
+    }
+
+    public Page<UserEntity> getAllUsersByPagination(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
+
+    public UserEntity updateUserInfo(UUID userID, UserUpdateRequestDTO updateRequestDTO) {
+        UserEntity user = userRepository.findById(userID)
+                .orElseThrow(() -> new CustomException(
+                        String.format("User not found by ID: %s", userID),
+                        HttpStatus.NOT_FOUND
+                ));
+
+        modelMapper.map(updateRequestDTO, user);
+
+        return userRepository.save(user);
     }
 }
 
