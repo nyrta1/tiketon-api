@@ -1,28 +1,22 @@
 package com.wcod.tiketondemo.services;
 
-import com.wcod.tiketondemo.data.dto.props.BulkDeleteRequestDTO;
-import com.wcod.tiketondemo.data.dto.props.BulkTicketRequestDTO;
 import com.wcod.tiketondemo.data.dto.props.TicketRequestDTO;
-import com.wcod.tiketondemo.data.models.EventSession;
-import com.wcod.tiketondemo.data.models.Ticket;
+import com.wcod.tiketondemo.data.dto.props.TicketResponseDTO;
+import com.wcod.tiketondemo.data.models.*;
 import com.wcod.tiketondemo.repository.EventSessionRepository;
 import com.wcod.tiketondemo.repository.TicketRepository;
 import com.wcod.tiketondemo.shared.exception.CustomException;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -35,55 +29,46 @@ public class TicketService {
         return ticketRepository.findAll(pageable);
     }
 
-    public Page<Ticket> getTicketsBySession(UUID sessionId, Pageable pageable) {
-        return ticketRepository.findBySessionId(sessionId, pageable);
+    @Transactional(readOnly = true)
+    public List<TicketResponseDTO> getTicketsBySession(UUID sessionId) {
+        return Optional.of(ticketRepository.findTicketsBySessionId(sessionId))
+                .filter(list -> !list.isEmpty())
+                .orElseThrow(() -> new CustomException("Tickets by the session id not found!", HttpStatus.NOT_FOUND));
     }
 
     @Transactional
-    public Ticket createTicket(TicketRequestDTO requestDTO) {
-        Ticket ticket = modelMapper.map(requestDTO, Ticket.class);
-        EventSession session = sessionRepository.findById(requestDTO.getSessionId())
-                .orElseThrow(() -> new CustomException(String.format("Session not found by ID: %s", requestDTO.getSessionId()), HttpStatus.NOT_FOUND));
-        ticket.setSession(session);
-        return ticketRepository.saveAndFlush(ticket);
+    public Ticket reserveTicket(UserEntity boughtUser, UUID ticketID) {
+        Ticket ticket = ticketRepository.findById(ticketID)
+                .orElseThrow(() -> new CustomException(
+                        String.format("Ticket not found in session for id: %s", ticketID),
+                        HttpStatus.NOT_FOUND
+                ));
+
+        if (ticket.getStatus() != TicketStatus.AVAILABLE) {
+            throw new CustomException("Ticket is already reserved or sold", HttpStatus.BAD_REQUEST);
+        }
+
+        ticket.setBoughtUser(boughtUser);
+        ticket.setStatus(TicketStatus.SOLD);
+
+        return ticketRepository.save(ticket);
     }
 
     @Transactional
-    public List<Ticket> createBulkTickets(BulkTicketRequestDTO requestDTO) {
-        EventSession session = sessionRepository.findById(requestDTO.getSessionId())
-                .orElseThrow(() -> new EntityNotFoundException("Session not found"));
+    public Ticket confirmPayment(UUID ticketId) {
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new CustomException("Ticket not found", HttpStatus.NOT_FOUND));
 
-        List<Ticket> tickets = IntStream.range(0, requestDTO.getQuantity())
-                .mapToObj(i -> {
-                    Ticket ticket = new Ticket();
-                    ticket.setSession(session);
-                    ticket.setPrice(requestDTO.getPrice());
-                    ticket.setTicketType(requestDTO.getTicketType());
-                    return ticket;
-                })
-                .toList();
+        if (ticket.getStatus() != TicketStatus.PENDING) {
+            throw new CustomException("Ticket is already paid or cancelled", HttpStatus.BAD_REQUEST);
+        }
 
-        return ticketRepository.saveAll(tickets);
+        ticket.setStatus(TicketStatus.SOLD);
+
+        return ticketRepository.save(ticket);
     }
 
-    @Transactional
-    public Ticket updateTicket(UUID id, TicketRequestDTO requestDTO) {
-        Ticket ticket = ticketRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Ticket not found"));
-
-        ticket.setPrice(requestDTO.getPrice());
-        ticket.setTicketType(requestDTO.getTicketType());
-
-        return ticketRepository.saveAndFlush(ticket);
+    public Page<Ticket> getUserTickets(UUID userId, Pageable pageable) {
+        return ticketRepository.findAllByBoughtUserId(userId, pageable);
     }
-
-    public void deleteTicket(UUID id) {
-        ticketRepository.deleteById(id);
-    }
-
-    @Transactional
-    public void deleteBulkTickets(BulkDeleteRequestDTO requestDTO) {
-        ticketRepository.deleteAllById(requestDTO.getTicketIds());
-    }
-
 }

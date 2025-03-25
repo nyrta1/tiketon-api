@@ -1,7 +1,7 @@
 services:
-  tiketon:
+  tiketon-https:
     container_name: tiketon-https
-    image: tiketon-https:1.0.0
+    image: tiketon-https:latest
     build:
       context: .
       dockerfile: Dockerfile
@@ -12,6 +12,68 @@ services:
     restart: always
     env_file:
       - .env
+    environment:
+      SERVER_PORT: 8443
+
+  tiketon-http:
+    container_name: tiketon-http
+    image: tiketon-http:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - app_network
+    ports:
+      - "8080:8080"
+    restart: always
+    env_file:
+      - .env
+    environment:
+      SERVER_PORT: 8080
+
+  postgres:
+    container_name: postgres
+    image: postgres:17
+    restart: always
+    networks:
+      - app_network
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  minio:
+    container_name: minio
+    image: minio/minio:latest
+    networks:
+      - app_network
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio_data:/data
+    command: server --console-address ":9001" /data
+
+  minio-init:
+    image: minio/mc:latest
+    depends_on:
+      - minio
+    networks:
+      - app_network
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set myminio http://minio:9000 minioadmin minioadmin;
+      if ! mc ls myminio/public-bucket >/dev/null 2>&1; then
+        mc mb myminio/public-bucket;
+        mc anonymous set public myminio/public-bucket;
+      fi;
+      exit 0;
+      "
 
 networks:
   app_network:
@@ -19,4 +81,6 @@ networks:
 
 volumes:
   postgres_data:
+    driver: local
+  minio_data:
     driver: local

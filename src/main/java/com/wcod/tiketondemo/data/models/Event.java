@@ -51,4 +51,7 @@ public class Event {
     @JsonManagedReference
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<EventSession> sessions;
+
+    @Transient
+    private String imageUrl;
 }

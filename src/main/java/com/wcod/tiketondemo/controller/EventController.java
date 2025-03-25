@@ -57,6 +57,7 @@ public class EventController {
                 .body(eventService.createEvent(eventRequestDTO));
     }
 
+
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(path = "/{eventId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(

@@ -43,17 +43,5 @@ public class AuthController {
     ){
         return ResponseEntity.ok(authService.loginAndGetAccessToken(request));
     }
-
-    @GetMapping("/userinfo")
-    @Operation(
-            summary = "Get authenticated user info",
-            description = "Get authenticated user info",
-            security = @SecurityRequirement(name = "Bearer Authentication")
-    )
-    public ResponseEntity<UserEntity> userinfo() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserEntity user = (UserEntity) authentication.getPrincipal();
-        return ResponseEntity.ok(user);
-    }
 }
 
