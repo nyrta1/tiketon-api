@@ -22,8 +22,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 
@@ -37,7 +35,6 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
 
     private static final String[] SWAGGER_PATH_LIST = {
-            // -- Swagger UI v2
             "/v2/api-docs",
             "/swagger-resources",
             "/swagger-resources/**",
@@ -45,37 +42,29 @@ public class SecurityConfig {
             "/configuration/security",
             "/swagger-ui.html",
             "/webjars/**",
-            // -- Swagger UI v3 (OpenAPI)
             "/v3/api-docs/**",
             "/swagger-ui/**"
-            // other public endpoints of your API may be appended to this array
     };
 
     private static final String[] openEndpoints = {
-            // City
             "/api/cities",
 
-            // Buildings
             "/api/buildings",
             "/api/buildings/search/by-city/**",
             "/api/buildings/search/by-address",
             "/api/buildings/search/by-name",
             "/api/buildings/search/by-coordinates",
 
-            // Event Categories
             "/api/event-categories",
 
-            // Events
             "/api/events",
             "/api/events/search/by-id/**",
             "/api/events/search/by-name/**",
             "/api/events/search/by-name/**",
 
-            // Event Session
             "/api/event-sessions",
             "/api/event-sessions/search/by-event/**",
 
-            // Tickets
             "/api/tickets/search/by-session/**"
     };
 
@@ -118,10 +107,12 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://94.232.246.12:3000", "http://localhost:3000", "http://94.232.246.12", "http://localhost"));
+        configuration.setAllowedOrigins(List.of("https://oshteatr.kg"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "Accept"));
+        configuration.setExposedHeaders(List.of("Content-Length", "Content-Range"));
         configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
